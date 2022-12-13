@@ -44,9 +44,9 @@ main (int argc, char *argv[])
    */
   Login = create_Login ();
   gtk_widget_show (Login);
-  Administator = create_Administator ();
+  /*Administator = create_Administator ();
   gtk_widget_show (Administator);
-  Add_user = create_Add_user ();
+  	Add_user = create_Add_user ();
   gtk_widget_show (Add_user);
   Modify_user_ = create_Modify_user_ ();
   gtk_widget_show (Modify_user_);
@@ -61,7 +61,7 @@ main (int argc, char *argv[])
   Modify_polling_station = create_Modify_polling_station ();
   gtk_widget_show (Modify_polling_station);
   Vote = create_Vote ();
-  gtk_widget_show (Vote);
+  gtk_widget_show (Vote);*/
 
   gtk_main ();
   return 0;

@@ -1237,7 +1237,7 @@
 	      <signal name="row_activated" handler="on_list_polling_row_activated" last_modification_time="Tue, 29 Nov 2022 21:44:17 GMT"/>
 	    </widget>
 	    <packing>
-	      <property name="x">56</property>
+	      <property name="x">64</property>
 	      <property name="y">184</property>
 	    </packing>
 	  </child>

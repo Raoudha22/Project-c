@@ -74,6 +74,7 @@ int delete_pst(char *filename,int id)
     rename("pstnew.txt","pstfile.txt");
     return tr;
 }
+
 Polling_station search_pst (char* filename,int id)
 {
     Polling_station p;
@@ -148,7 +149,7 @@ void display_pst (GtkWidget *liste)
         column = gtk_tree_view_column_new_with_attributes("ID_AGENT", renderer, "text", ID_AGENT, NULL);
         gtk_tree_view_append_column(GTK_TREE_VIEW(liste), column);
 
-        store = gtk_list_store_new(COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+        store = gtk_list_store_new(COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
         f = fopen("pstfile.txt", "r");
         if (f == NULL)
         {
@@ -157,10 +158,10 @@ void display_pst (GtkWidget *liste)
         else
         {
             f = fopen("pstfile.txt", "a+");
-            while (fscanf(f, "%d %d %s %s %s \n ", &id,&cov_adps,gouv_addps,mun_addps,idta_addps) != EOF)
+            while (fscanf(f, "%s %s %s %s %s \n ", id_pst,capacity,gouvernorate,municipality,id_agent) != EOF)
             {
                 gtk_list_store_append(store, &iter);
-                gtk_list_store_set(store, &iter,ID_PST,id,CAPACITY,cov_adps,GOUVERNORATE,gouv_addps,MUNICIPALITY,mun_addps,ID_AGENT,           idta_addps,-1);
+                gtk_list_store_set(store, &iter,ID_PST,id_pst,CAPACITY,capacity,GOUVERNORATE,gouvernorate,MUNICIPALITY,municipality,ID_AGENT,id_agent,-1);
             }
         }
         fclose(f);

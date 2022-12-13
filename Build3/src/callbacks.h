@@ -1,8 +1,8 @@
 #include <gtk/gtk.h>
-#include "Functionpst.h"
+#include "Functionpst1.h"
 
 void
-on_login_sign_clicked                  (GtkButton       *button,
+on_login_sign_clicked                  (GtkWidget       *button,
                                         gpointer         user_data);
 
 void
