@@ -158,9 +158,9 @@ on_polling_mod_clicked                 (GtkWidget      *object,
 {
 	GtkWidget *mod;
 	GtkWidget *w1;
-	w1=lookup_widget(object,"Administator");
+	w1=lookup_widget(object,"Administator");	
 	mod = create_Modify_polling_station();
-	gtk_widget_show(mod);	
+	gtk_widget_show(mod);
 	gtk_widget_hide(w1);
 }
 
@@ -219,7 +219,29 @@ void
 on_polling_add_clicked                 (GtkWidget       *object,
                                         gpointer         user_data)
 {
-   	GtkWidget *add;
+	user u;	
+	GtkWidget *Combobox3;
+	FILE *f;
+	int n,i;
+	char agent[50][20];
+	n=0;
+	f=fopen("fileuser.txt","r");
+	while(fscanf(f,"%s %s %s %s %d %d %d %d %d %d %d %d %s %s\n",u.id,u.name,u.fn,u.pass,&u.date.day,&u.date.month,&u.date.year,&u.gender,&u.phone,&u.social,&u.dis,&u.role,u.mun,u.vote)!=EOF)
+        { 
+		if(u.role==2)
+		{
+		strcpy(agent[n],u.id);
+		n++;
+		}
+	
+		for(i=0;i<n;i++)
+		{
+		gtk_combo_box_append_text (GTK_COMBO_BOX(Combobox3),(agent[i]));
+		}
+	}
+	
+		
+	GtkWidget *add;
 	GtkWidget *w1;
 	w1=lookup_widget(object,"Administator");	
    	add = create_Add_polling_station();
@@ -760,7 +782,7 @@ on_addpolling_sub_clicked              (GtkWidget       *object,
 	add_pst("pstfile.txt",p);
 	}
 	else
-	gtk_label_set_text(GTK_LABEL(output),"Please confirm your choices");
+	gtk_label_set_text(GTK_LABEL(output),"Please confirm you choices");
 
 	GtkWidget *affichage;
 	GtkWidget *w1;
