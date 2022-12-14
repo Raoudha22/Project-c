@@ -158,10 +158,26 @@ on_polling_mod_clicked                 (GtkWidget      *object,
 {
 	GtkWidget *mod;
 	GtkWidget *w1;
+	FILE *f,
+	int i,n=0;
+	user u;
 	w1=lookup_widget(object,"Administator");	
 	mod = create_Modify_polling_station();
 	gtk_widget_show(mod);
 	gtk_widget_hide(w1);
+	f=fopen("fileuser.txt","r");
+	while(fscanf(f,"%s %s %s %s %d %d %d %d %d %d %d %d %s %s\n",u.id,u.name,u.fn,u.pass,&u.date.day,&u.date.month,&u.date.year,&u.gender,&u.phone,&u.social,&u.dis,&u.role,u.mun,u.vote)!=EOF)
+        { 
+		if(u.role==2)
+		{
+		strcpy(agent[n],u.id);
+		n++;
+		}
+	}
+		for(i=0;i<n;i++)
+		{
+		gtk_combo_box_append_text (GTK_COMBO_BOX(Combobox3),(agent[i]));
+		}
 }
 
 
@@ -245,9 +261,6 @@ on_polling_add_clicked                 (GtkWidget       *object,
 		{
 		gtk_combo_box_append_text (GTK_COMBO_BOX(Combobox3),(agent[i]));
 		}
-	
-	
-		
 	
 }
 
@@ -740,16 +753,18 @@ on_addpolling_sub_clicked              (GtkWidget       *object,
                                         gpointer         user_data)
 {
 	Polling_station p;
-	user u;
 	GtkWidget *Cap;
 	GtkWidget *Combobox1;
 	GtkWidget *Combobox2;
 	GtkWidget *Combobox3;
 	GtkWidget *output;
-	char agent[50][20];
-	int i,n;
-	FILE *f;
 	
+	GtkWidget *affichage;
+	GtkWidget *w1;
+	w1=lookup_widget(object,"Add_polling_station");
+	affichage= create_Administator ();
+	gtk_widget_show(affichage);
+	gtk_widget_hide(w1);
 	
 	Cap=lookup_widget(object,"addpolling_cap");
 	output=lookup_widget(object,"addpolling_err");
@@ -785,14 +800,8 @@ on_addpolling_sub_clicked              (GtkWidget       *object,
 	add_pst("pstfile.txt",p);
 	}
 	else
-	gtk_label_set_text(GTK_LABEL(output),"Please confirm you choices");
+	{gtk_label_set_text(GTK_LABEL(output),"Please confirm you choices");}
 
-	GtkWidget *affichage;
-	GtkWidget *w1;
-	w1=lookup_widget(object,"Add_polling_station");
-	affichage= create_Administator ();
-	gtk_widget_show(affichage);
-	gtk_widget_hide(w1);
 }
 
 void
@@ -812,6 +821,16 @@ on_modpolling_sub_clicked              (GtkWidget       *object,
 	affichage= create_Administator ();
 	gtk_widget_show(affichage);
 	gtk_widget_hide(w1);
+	
+	Polling_station p;
+	GtkWidget *Cap;
+	GtkWidget *Combobox1;
+	GtkWidget *Combobox2;
+	GtkWidget *Combobox3;
+	GtkWidget *output;
+	GtkWidget *output_id;
+	
+	
 }
 
 
