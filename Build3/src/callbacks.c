@@ -823,12 +823,19 @@ on_modpolling_sub_clicked              (GtkWidget       *object,
 	gtk_widget_hide(w1);
 	
 	Polling_station p;
+	char id[50];
 	GtkWidget *Cap;
 	GtkWidget *Combobox1;
 	GtkWidget *Combobox2;
 	GtkWidget *Combobox3;
 	GtkWidget *output;
 	GtkWidget *output_id;
+	
+	output_id=lookup_widget(object,"idpst_label");//?
+	Cap=lookup_widget(object,"addpolling_cap");
+	sprintf(id, "%d" , p.id);
+	gtk_label_set_text(GTK_LABEL(output_id),id);
+	gtk_spin_button_set_value_(
 	
 	
 }
