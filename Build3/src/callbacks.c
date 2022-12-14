@@ -158,15 +158,22 @@ on_polling_mod_clicked                 (GtkWidget      *object,
 {
 	GtkWidget *mod;
 	GtkWidget *w1;
-	FILE *f,
+	GtkWidget *Cap;
+	GtkWidget *Combobox1;
+	GtkWidget *Combobox2;
+	GtkWidget *Combobox3;
+	GtkWidget *output_id;
+	FILE *f,*f2;
 	int i,n=0;
 	user u;
+	Polling_station p;
 	w1=lookup_widget(object,"Administator");	
 	mod = create_Modify_polling_station();
 	gtk_widget_show(mod);
 	gtk_widget_hide(w1);
 	Combobox3=lookup_widget(mod,"addpolling_id");
 	f=fopen("fileuser.txt","r");
+	f2=fopen("selected.txt","r");
 	while(fscanf(f,"%s %s %s %s %d %d %d %d %d %d %d %d %s %s\n",u.id,u.name,u.fn,u.pass,&u.date.day,&u.date.month,&u.date.year,&u.gender,&u.phone,&u.social,&u.dis,&u.role,u.mun,u.vote)!=EOF)
         { 
 		if(u.role==2)
@@ -179,8 +186,25 @@ on_polling_mod_clicked                 (GtkWidget      *object,
 		{
 		gtk_combo_box_append_text (GTK_COMBO_BOX(Combobox3),(agent[i]));
 		}
-}
 
+while(fscanf(f2,"%d %d %s %s %s \n",&p.id,&p.cov_adps,p.gouv_addps,p.mun_addps,p.idta_addps)!=EOF)
+	{
+		output_id=lookup_widget(object,"idpst_label");//?
+		Cap=lookup_widget(object,"addpolling_cap");
+		Combobox1=lookup_widget(object,"addpolling_gov");	
+		Combobox2=lookup_widget(object,"addpolling_mun");
+		Combobox3=lookup_widget(object,"addpolling_id");
+
+		sprintf(id, "%d" , p.id);
+		gtk_label_set_text(GTK_LABEL(output_id),id);
+		gtk_spin_button_set_value_(Cap,p.cov_adps);
+		gtk_combo_box_set_active(GTK_COMBO_BOX(Combobox1),p.gouv_addps);
+		gtk_combo_box_set_active(GTK_COMBO_BOX(Combobox2),p.mun_addps);
+		gtk_combo_box_set_active(GTK_COMBO_BOX(Combobox3),p.idta_addps);
+	}
+	fclose(f2);
+	fclose(f);
+}
 
 void
 on_polling_search_clicked              (GtkWidget       *object,
@@ -833,33 +857,55 @@ on_modpolling_sub_clicked              (GtkWidget       *object,
 	treeview =lookup_widget(affichage, "list_polling");
 	display_pst (treeview);
 	
+	
 	Polling_station p;
+	Polling_station p2;
 	char id[50];
 	FILE *f=fopen("selected.txt","r");
+	FILE *f2=fopen("pstfile.txt","r");
 	GtkWidget *Cap;
 	GtkWidget *Combobox1;
 	GtkWidget *Combobox2;
 	GtkWidget *Combobox3;
 	GtkWidget *output;
-	GtkWidget *output_id;
+	
+	Cap=lookup_widget(object,"modpolling_cap");
+	output=lookup_widget(object,"modpolling_err");
+	Combobox1=lookup_widget(object,"modpolling_gov");	
+	Combobox2=lookup_widget(object,"modpolling_mun");
+	Combobox3=lookup_widget(object,"modpolling_id");
 	
 	while(fscanf(f,"%d %d %s %s %s \n",&p.id,&p.cov_adps,p.gouv_addps,p.mun_addps,p.idta_addps)!=EOF)
 	{
-		output_id=lookup_widget(object,"idpst_label");//?
-		Cap=lookup_widget(object,"addpolling_cap");
-		Combobox1=lookup_widget(object,"addpolling_gov");	
-		Combobox2=lookup_widget(object,"addpolling_mun");
-		Combobox3=lookup_widget(object,"addpolling_id");
-
-		sprintf(id, "%d" , p.id);
-		gtk_label_set_text(GTK_LABEL(output_id),id);
-		gtk_spin_button_set_value_(Cap,p.cov_adps);
-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combobox1),p.gouv_addps);
-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combobox2),p.mun_addps);
-		gtk_combo_box_set_active(GTK_COMBO_BOX(Combobox3),p.idta_addps);
+		p2.id=p.id;
 	}
-	fclose(f);
+	p2.cov_adps=gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (Cap));
+
+	if(strcmp("Bizerte",gtk_combo_box_get_active_text(GTK_COMBO_BOX(Combobox1)))==0)
+		strcpy(p2.gouv_addps,"Bizerte");
+	else if(strcmp("Tunis",gtk_combo_box_get_active_text(GTK_COMBO_BOX(Combobox1)))==0)
+		strcpy(p2.gouv_addps,"Tunis");
+	else if(strcmp("Ariana",gtk_combo_box_get_active_text(GTK_COMBO_BOX(Combobox1)))==0)
+		strcpy(p2.gouv_addps,"Ariana");
+	else
+		strcpy(p2.gouv_addps,"Ben_Arous");
+	if(strcmp("Raoued",gtk_combo_box_get_active_text(GTK_COMBO_BOX(Combobox2)))==0)
+		strcpy(p2.mun_addps,"Raoued");
+	else if(strcmp("Ariana",gtk_combo_box_get_active_text(GTK_COMBO_BOX(Combobox2)))==0)
+		strcpy(p2.mun_addps,"Ariana");
+	else if(strcmp("La_Soukra",gtk_combo_box_get_active_text(GTK_COMBO_BOX(Combobox2)))==0)
+		strcpy(p2.mun_addps,"La_Soukra");
+	else
+		strcpy(p2.mun_addps," Mnihla");
 	
+	strcpy(p2.idta_addps,gtk_combo_box_get_active_text(GTK_COMBO_BOX(Combobox3)));
+
+	if(strcmp)
+	{
+		 modify_pst("pstfile.txt",p2.id,p2);
+	}
+	else
+	{gtk_label_set_text(GTK_LABEL(output),"Please confirm you choices");}
 	
 	
 }
