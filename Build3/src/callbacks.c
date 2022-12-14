@@ -225,6 +225,7 @@ on_polling_add_clicked                 (GtkWidget       *object,
 	int n,i;
 	char agent[50][20];
 	n=0;
+	Combobox3=lookup_widget(object,"addpolling_id");
 	f=fopen("fileuser.txt","r");
 	while(fscanf(f,"%s %s %s %s %d %d %d %d %d %d %d %d %s %s\n",u.id,u.name,u.fn,u.pass,&u.date.day,&u.date.month,&u.date.year,&u.gender,&u.phone,&u.social,&u.dis,&u.role,u.mun,u.vote)!=EOF)
         { 
@@ -753,6 +754,7 @@ on_addpolling_sub_clicked              (GtkWidget       *object,
 	output=lookup_widget(object,"addpolling_err");
 	Combobox1=lookup_widget(object,"addpolling_gov");	
 	Combobox2=lookup_widget(object,"addpolling_mun");
+	Combobox3=lookup_widget(object,"addpolling_id");
 
 	p.id=generate_id();
 
