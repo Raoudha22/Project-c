@@ -193,13 +193,13 @@ on_polling_search_clicked              (GtkWidget       *object,
     {
 	strcat(msg, "ID:");
         strcat(msg, idt);
-        strcat(msg, "CAP:");
+        strcat(msg, " CAP:");
         strcat(msg, cap);
-        strcat(msg, "GOUV:");
+        strcat(msg, " GOUV:");
         strcat(msg, p.gouv_addps);
-        strcat(msg, "MUNI");
+        strcat(msg, " MUNI");
         strcat(msg, p.mun_addps);
-        strcat(msg, "AGENT:");
+        strcat(msg, " AGENT:");
         strcat(msg, p.idta_addps);
 
         gtk_label_set_text(GTK_LABEL(output), msg);
@@ -225,6 +225,12 @@ on_polling_add_clicked                 (GtkWidget       *object,
 	int n,i;
 	char agent[50][20];
 	n=0;
+	GtkWidget *add;
+	GtkWidget *w1;
+	w1=lookup_widget(object,"Administator");	
+   	add = create_Add_polling_station();
+   	gtk_widget_show(add);
+	gtk_widget_hide(w1);
 	Combobox3=lookup_widget(object,"addpolling_id");
 	f=fopen("fileuser.txt","r");
 	while(fscanf(f,"%s %s %s %s %d %d %d %d %d %d %d %d %s %s\n",u.id,u.name,u.fn,u.pass,&u.date.day,&u.date.month,&u.date.year,&u.gender,&u.phone,&u.social,&u.dis,&u.role,u.mun,u.vote)!=EOF)
@@ -234,20 +240,15 @@ on_polling_add_clicked                 (GtkWidget       *object,
 		strcpy(agent[n],u.id);
 		n++;
 		}
-	
+	}
 		for(i=0;i<n;i++)
 		{
 		gtk_combo_box_append_text (GTK_COMBO_BOX(Combobox3),(agent[i]));
 		}
-	}
+	
 	
 		
-	GtkWidget *add;
-	GtkWidget *w1;
-	w1=lookup_widget(object,"Administator");	
-   	add = create_Add_polling_station();
-   	gtk_widget_show(add);
-	gtk_widget_hide(w1);
+	
 }
 
 
