@@ -2,7 +2,7 @@
 #include "Functionpst1.h"
 
 void
-on_login_sign_clicked                  (GtkWidget       *button,
+on_login_sign_clicked                  (GtkWidget       *object,
                                         gpointer         user_data);
 
 void
@@ -345,4 +345,8 @@ on_claim_confirm_toggled               (GtkToggleButton *togglebutton,
 
 void
 on_button6_clicked                     (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+on_modpolling_conf_toggled             (GtkToggleButton *togglebutton,
                                         gpointer         user_data);

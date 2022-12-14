@@ -8,16 +8,21 @@
 #include "interface.h"
 #include "support.h"
 #include "Functionpst1.h"
+#include "user1_function.h"
 
 
 void
-on_login_sign_clicked                  (GtkWidget       *button,
+on_login_sign_clicked                  (GtkWidget       *object,
                                         gpointer         user_data)
 {
+		
 	GtkWidget *affichage;
+	GtkWidget *w1;
 	GtkWidget *treeview;
+	w1=lookup_widget(object,"Login");
 	affichage= create_Administator ();
 	gtk_widget_show(affichage);
+	gtk_widget_hide(w1);
 	treeview =lookup_widget(affichage, "list_polling");
 	display_pst (treeview);
 	
@@ -122,21 +127,27 @@ on_list_polling_row_activated          (GtkTreeView     *treeview,
     gchar *id_agent;
     Polling_station p;
     
-    GtkTreeModel *model = gtk_tree_view_get_model("list_polling");
+    
+    GtkTreeModel *model = gtk_tree_view_get_model(treeview);
     if (gtk_tree_model_get_iter(model, &iter, path))
     {
         FILE *f;
-        f = fopen("pstfile.txt", "w");
+        f = fopen("selected.txt", "w");
         if (f != NULL)
         {
             gtk_tree_model_get(GTK_LIST_STORE(model), &iter, 0, &id_pst, 1, &capacity, 2, &gouvernorate, 3, &municipality, 4, &id_agent, -1);
-	    p.id=id_pst;
-	    strcpy(p.cov_adps,capacity);
+	    int id= atoi (id_pst);
+	    int cap= atoi (capacity);
+	    fprintf(f,"%d %d %s %s %s",id,cap,gouvernorate,municipality,id_agent);
+	    /*strcpy(p.cov_adps,capacity);
 	    strcpy(p.gouv_addps,gouvernorate);
 	    strcpy(p.mun_addps,municipality);
 	    strcpy(p.idta_addps,id_agent);
-	    fclose(f);
+	    delete_pst("pstfile.txt",id);
+	    display_pst ("list_polling");*/
+	
         }
+	fclose(f);
     }
 }
 
@@ -145,9 +156,12 @@ void
 on_polling_mod_clicked                 (GtkWidget      *object,
                                         gpointer         user_data)
 {
- GtkWidget *mod;
-    mod = create_Modify_polling_station();
-    gtk_widget_show(mod);
+	GtkWidget *mod;
+	GtkWidget *w1;
+	w1=lookup_widget(object,"Administator");
+	mod = create_Modify_polling_station();
+	gtk_widget_show(mod);	
+	gtk_widget_hide(w1);
 }
 
 
@@ -155,56 +169,49 @@ void
 on_polling_search_clicked              (GtkWidget       *object,
                                         gpointer         user_data)
 {
-    /*Polling_station p,p2;
-    char filename[30] = "pstfile.txt", tab[20], msg[200] = "L'utilsateur a ete trouvé CIN:";
+    Polling_station p;
+    char msg[200];
+    char idt[20],cap[20];
+    
     GtkWidget *input_id;
-    int id;
-    input_id = lookup_widget(objet, "searchpolling");
-    id=gtk_entry_get_text(GTK_ENTRY(input_id)));
-    p2 = recherche("pstfile.txt", id);
-    if(p2.id==-1)
+    GtkWidget *output;
+    
+    input_id = lookup_widget(object, "searchpolling");
+    output = lookup_widget(object, "searchpolling_label");
+    strcpy(idt, gtk_entry_get_text(GTK_ENTRY(input_id)));
+    int id = atoi ( idt );
+    p = search_pst("pstfile.txt", id);
+    sprintf(idt, "%d" , p.id);
+    sprintf(cap, "%d" , p.cov_adps);
+    if(p.id==-1)
     {
-        FILE *f = fopen(filename, "r");
-        if (f != NULL)
-        {
-            while (fscanf(f, "%s %s %s %s %s %s %s %s\n", p.nom, p.prenom, p.cin, p.sexe, p.jour, p.etat, p.bv, p.vote) == R)
-            {
-            }
-            fclose(f);
-        }
-        strcat(debut, p.cin);
-        strcat(debut, " NOM:");
-        strcat(debut, p.nom);
-        strcat(debut, " PRENOM:");
-        strcat(debut, p.prenom);
-        strcat(debut, " DATE DE NAISSANCE:");
-        strcat(debut, p.jour);
-        strcat(debut, " SEXE:");
-        strcat(debut, p.sexe);
-        strcat(debut, " Role:");
-        strcat(debut, p.etat);
-        strcat(debut, " BUREAU DE VOTE");
-        strcat(debut, p.bv);
-        strcat(debut, " Etat De VOTE");
-        strcat(debut, p.vote);
-
-        GtkWidget *output;
-        output = lookup_widget(objet_graphique, "resultat_label");
-        gtk_label_set_text(GTK_LABEL(output), debut);
-        FILE *f2;
-        f2 = fopen("selection.txt", "w");
-        if (f2!= NULL)
-        {
-            fprintf(f2, "%s", p.cin);
-            fclose(f2);
-        }
+	
+	gtk_label_set_text(GTK_LABEL(output), "No polling station with that id");
+        
     }
     else
     {
-        GtkWidget *output;
-        output = lookup_widget(objet_graphique, "resultat_label");
-        gtk_label_set_text(GTK_LABEL(output), "Aucun Utilisateur n'a ete Trouvé");
-    }*/
+	strcat(msg, "ID:");
+        strcat(msg, idt);
+        strcat(msg, "CAP:");
+        strcat(msg, cap);
+        strcat(msg, "GOUV:");
+        strcat(msg, p.gouv_addps);
+        strcat(msg, "MUNI");
+        strcat(msg, p.mun_addps);
+        strcat(msg, "AGENT:");
+        strcat(msg, p.idta_addps);
+
+        gtk_label_set_text(GTK_LABEL(output), msg);
+	//put the search result in selected.txt
+        FILE *f;
+        f= fopen("selected.txt", "w");
+        if (f!= NULL)
+        {
+            fprintf(f,"%d %d %s %s %s",p.id,p.cov_adps,p.gouv_addps,p.mun_addps,p.idta_addps);
+            fclose(f);
+        }
+    }
 }
 
 
@@ -212,9 +219,12 @@ void
 on_polling_add_clicked                 (GtkWidget       *object,
                                         gpointer         user_data)
 {
-    GtkWidget *add;
-    add = create_Add_polling_station();
-    gtk_widget_show(add);
+   	GtkWidget *add;
+	GtkWidget *w1;
+	w1=lookup_widget(object,"Administator");	
+   	add = create_Add_polling_station();
+   	gtk_widget_show(add);
+	gtk_widget_hide(w1);
 }
 
 
@@ -222,7 +232,23 @@ void
 on_polling_del_clicked                 (GtkWidget       *object,
                                         gpointer         user_data)
 {
+	GtkWidget *affichage,*w1;
+	GtkWidget *treeview;	
+	Polling_station p;	
+	FILE *f=fopen("selected.txt","r");
 
+	while(fscanf(f,"%d %d %s %s %s \n",&p.id,&p.cov_adps,p.gouv_addps,p.mun_addps,p.idta_addps)!=EOF)
+            {
+                delete_pst("pstfile.txt",p.id);
+	    }
+	
+	
+	w1=lookup_widget(object,"Administator");
+	affichage= create_Administator ();
+	gtk_widget_show(affichage);
+	gtk_widget_hide(w1);
+	treeview =lookup_widget(affichage, "list_polling");
+	display_pst (treeview);
 }
 
 
@@ -673,11 +699,15 @@ on_spinbutton2_insert_text             (GtkEditable     *editable,
 }
 
 
+int confirmradio=0;
 void
 on_addpolling_conf_toggled             (GtkToggleButton *togglebutton,
                                         gpointer         user_data)
 {
-
+	if (gtk_toggle_button_get_active(GTK_RADIO_BUTTON(togglebutton)))
+    {
+        confirmradio=1;
+    }
 }
 
 
@@ -685,15 +715,78 @@ void
 on_addpolling_sub_clicked              (GtkWidget       *object,
                                         gpointer         user_data)
 {
+	Polling_station p;
+	user u;
+	GtkWidget *Cap;
+	GtkWidget *Combobox1;
+	GtkWidget *Combobox2;
+	GtkWidget *Combobox3;
+	GtkWidget *output;
+	char agent[50][20];
+	int i,n;
+	FILE *f;
+	
+	
+	Cap=lookup_widget(object,"addpolling_cap");
+	output=lookup_widget(object,"addpolling_err");
+	Combobox1=lookup_widget(object,"addpolling_gov");	
+	Combobox2=lookup_widget(object,"addpolling_mun");
 
+	p.id=generate_id();
+
+	p.cov_adps=gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (Cap));
+
+	if(strcmp("Bizerte",gtk_combo_box_get_active_text(GTK_COMBO_BOX(Combobox1)))==0)
+		strcpy(p.gouv_addps,"Bizerte");
+	else if(strcmp("Tunis",gtk_combo_box_get_active_text(GTK_COMBO_BOX(Combobox1)))==0)
+		strcpy(p.gouv_addps,"Tunis");
+	else if(strcmp("Ariana",gtk_combo_box_get_active_text(GTK_COMBO_BOX(Combobox1)))==0)
+		strcpy(p.gouv_addps,"Ariana");
+	else
+		strcpy(p.gouv_addps,"Ben_Arous");
+	if(strcmp("Raoued",gtk_combo_box_get_active_text(GTK_COMBO_BOX(Combobox2)))==0)
+		strcpy(p.mun_addps,"Raoued");
+	else if(strcmp("Ariana",gtk_combo_box_get_active_text(GTK_COMBO_BOX(Combobox2)))==0)
+		strcpy(p.mun_addps,"Ariana");
+	else if(strcmp("La_Soukra",gtk_combo_box_get_active_text(GTK_COMBO_BOX(Combobox2)))==0)
+		strcpy(p.mun_addps,"La_Soukra");
+	else
+		strcpy(p.mun_addps," Mnihla");
+
+	
+	strcpy(p.idta_addps,gtk_combo_box_get_active_text(GTK_COMBO_BOX(Combobox3)));
+	if (confirmradio=1)
+	{
+	add_pst("pstfile.txt",p);
+	}
+	else
+	gtk_label_set_text(GTK_LABEL(output),"Please confirm your choices");
+
+	GtkWidget *affichage;
+	GtkWidget *w1;
+	w1=lookup_widget(object,"Add_polling_station");
+	affichage= create_Administator ();
+	gtk_widget_show(affichage);
+	gtk_widget_hide(w1);
 }
 
+void
+on_modpolling_conf_toggled             (GtkToggleButton *togglebutton,
+                                        gpointer         user_data)
+{
+
+}
 
 void
 on_modpolling_sub_clicked              (GtkWidget       *object,
                                         gpointer         user_data)
 {
-
+	GtkWidget *affichage;
+	GtkWidget *w1;
+	w1=lookup_widget(object,"Modify_polling_station");
+	affichage= create_Administator ();
+	gtk_widget_show(affichage);
+	gtk_widget_hide(w1);
 }
 
 
@@ -761,4 +854,7 @@ on_button6_clicked                     (GtkButton       *button,
 {
 
 }
+
+
+
 

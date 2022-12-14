@@ -16,7 +16,8 @@ int delete_pst(char *pstfile,int id);
 Polling_station search_pst (char* pstfile,int id);
 void nb_electors_Pst(char *filename);
 float avg_age_of_agents(char * filename );
-int generate_id(char* filename);
+//int generate_id(char* filename);
+int generate_id();
 void display_pst (GtkWidget *liste);
 
 #endif // FUNCTIONPST_H_INCLUDED

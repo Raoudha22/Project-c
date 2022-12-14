@@ -82,7 +82,8 @@ Polling_station search_pst (char* filename,int id)
     FILE *f=fopen("pstfile.txt","r");
     if(f!=NULL)
     {
-        while(tr==0 && fscanf(f,"%d %d %s %s %s \n",&p.id,&p.cov_adps,p.gouv_addps,p.mun_addps,p.idta_addps)!=EOF)
+        while(tr==0 && fscanf(f,"%d %d %s %s %s \n",&p.id,&p.cov_adps,p.gouv_addps,p.mun_addps,p.idta_addps)
+!=EOF)
         {
             if(p.id==id)
                 tr=1;
@@ -94,13 +95,13 @@ Polling_station search_pst (char* filename,int id)
     return p;
 }
 
-int generate_id(char* filename)
+int generate_id()
 {
-    Polling_station p;
+    //Polling_station p;
     int k = 0;
     int i;
     int T[3];
-    do{
+    //do{
     for (i=0;i<3;i++)
     {
         T[i]=(rand() % 60);
@@ -108,8 +109,8 @@ int generate_id(char* filename)
     }
     for (i = 0; i < 3; i++)
     k = 10 * k + T[i];
-    search_pst ("pstfile.txt",k);
-    }while(p.id!=-1);
+    //search_pst ("pstfile.txt",k);
+    //}while(p.id!=-1);
     return k;
 }
 
@@ -169,3 +170,5 @@ void display_pst (GtkWidget *liste)
         g_object_unref(store);
     }
 }
+
+

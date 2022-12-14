@@ -1701,7 +1701,7 @@ create_Add_election_managment (void)
   GtkWidget *eventbox86;
   GtkWidget *addelecmang_labelmun;
   GtkWidget *eventbox87;
-  //GtkWidget *addelecmang_labelnub;
+  GtkWidget *addelecmang_labelnub;
   GtkWidget *eventbox88;
   GtkWidget *addelecmang_labelid;
   GtkWidget *eventbox89;
@@ -1711,7 +1711,7 @@ create_Add_election_managment (void)
   GtkWidget *eventbox91;
   GtkWidget *addelecmang_err;
   GtkWidget *eventbox92;
-  //GtkWidget *addelecmang_labelnub;
+  GtkWidget *addelecmang_labelnub;
   GtkWidget *eventbox93;
   GtkWidget *addelecmang_labelopen;
   GtkWidget *eventbox94;
@@ -2953,10 +2953,6 @@ create_Add_polling_station (void)
   gtk_widget_show (addpolling_gov);
   gtk_container_add (GTK_CONTAINER (eventbox137), addpolling_gov);
   gtk_widget_set_size_request (addpolling_gov, 189, 29);
-  gtk_combo_box_append_text (GTK_COMBO_BOX (addpolling_gov), _("Bizerte"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (addpolling_gov), _("Tunis"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (addpolling_gov), _("Ariana"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (addpolling_gov), _("Ben_Arous"));
 
   eventbox138 = gtk_event_box_new ();
   gtk_widget_show (eventbox138);
@@ -2967,10 +2963,6 @@ create_Add_polling_station (void)
   gtk_widget_show (addpolling_mun);
   gtk_container_add (GTK_CONTAINER (eventbox138), addpolling_mun);
   gtk_widget_set_size_request (addpolling_mun, 189, 29);
-  gtk_combo_box_append_text (GTK_COMBO_BOX (addpolling_mun), _("Raoued"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (addpolling_mun), _("Ariana"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (addpolling_mun), _("La_Soukra"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (addpolling_mun), _(" Mnihla"));
 
   eventbox139 = gtk_event_box_new ();
   gtk_widget_show (eventbox139);
@@ -2987,7 +2979,7 @@ create_Add_polling_station (void)
   gtk_fixed_put (GTK_FIXED (fixed16), alignment36, 320, 184);
   gtk_widget_set_size_request (alignment36, 60, 27);
 
-  addpolling_cap_adj = gtk_adjustment_new (1, 1, 2000, 1, 10, 10);
+  addpolling_cap_adj = gtk_adjustment_new (1, 1, 100, 1, 10, 10);
   addpolling_cap = gtk_spin_button_new (GTK_ADJUSTMENT (addpolling_cap_adj), 1, 0);
   gtk_widget_show (addpolling_cap);
   gtk_container_add (GTK_CONTAINER (alignment36), addpolling_cap);
@@ -3347,7 +3339,7 @@ create_Vote (void)
   GtkWidget *claim_time;
   GtkWidget *image49;
   GtkWidget *eventbox157;
-  //GtkWidget *claim_id;
+  GtkWidget *claim_id;
   GtkWidget *eventbox158;
   GtkWidget *claim_labeldate;
   GtkWidget *eventbox159;
